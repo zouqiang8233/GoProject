@@ -1,0 +1,5 @@
+message Student {
+	optional string Name = 1;  // 名字
+	optional int32  Age  = 2;  // 年龄
+	optional int32  NO = 3;
+}
