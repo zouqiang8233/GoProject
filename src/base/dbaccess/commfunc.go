@@ -1,6 +1,7 @@
 package dbaccess
 
 import (
+	"database/sql"
 	"reflect"
 	"strings"
 
@@ -65,37 +66,94 @@ func DataToProto(data []interface{}, inMap map[string]int, pb proto.Message) {
 		if index, ok := inMap[strName]; ok {
 			switch strFieldType {
 			case "*float32":
-				valueTmp := new(float32)
-				*valueTmp = *(data[index].(*float32))
-				*(value.(**float32)) = valueTmp
+				valueSrc := (data[index]).(*sql.NullFloat64)
+
+				if valueSrc.Valid {
+					valueTmp := new(float32)
+					*valueTmp = (float32)(valueSrc.Float64)
+					*(value.(**float32)) = valueTmp
+				} else {
+					value = nil
+				}
+
 			case "*float64":
-				valueTmp := new(float64)
-				*valueTmp = *(data[index].(*float64))
-				*(value.(**float64)) = valueTmp
+				valueSrc := (data[index]).(*sql.NullFloat64)
+
+				if valueSrc.Valid {
+					valueTmp := new(float64)
+					*valueTmp = valueSrc.Float64
+					*(value.(**float64)) = valueTmp
+				} else {
+					value = nil
+				}
+
 			case "*int32":
-				valueTmp := new(int32)
-				*valueTmp = *(data[index].(*int32))
-				*(value.(**int32)) = valueTmp
+				valueSrc := (data[index]).(*sql.NullInt64)
+
+				if valueSrc.Valid {
+					valueTmp := new(int32)
+					*valueTmp = (int32)(valueSrc.Int64)
+					*(value.(**int32)) = valueTmp
+				} else {
+					value = nil
+				}
+
 			case "*int64":
-				valueTmp := new(int64)
-				*valueTmp = *(data[index].(*int64))
-				*(value.(**int64)) = valueTmp
+				valueSrc := (data[index]).(*sql.NullInt64)
+
+				if valueSrc.Valid {
+					valueTmp := new(int64)
+					*valueTmp = valueSrc.Int64
+					*(value.(**int64)) = valueTmp
+				} else {
+					value = nil
+				}
+
 			case "*string":
-				valueTmp := new(string)
-				*valueTmp = *(data[index].(*string))
-				*(value.(**string)) = valueTmp
+
+				valueSrc := (data[index]).(*sql.NullString)
+
+				if valueSrc.Valid {
+					valueTmp := new(string)
+					*valueTmp = valueSrc.String
+					*(value.(**string)) = valueTmp
+				} else {
+					value = nil
+				}
+
 			case "*uint8":
-				valueTmp := new(uint8)
-				*valueTmp = *(data[index].(*uint8))
-				*(value.(**uint8)) = valueTmp
+				valueSrc := (data[index]).(*sql.NullInt64)
+
+				if valueSrc.Valid {
+					valueTmp := new(uint8)
+					*valueTmp = (uint8)(valueSrc.Int64)
+					*(value.(**uint8)) = valueTmp
+				} else {
+					value = nil
+				}
+
 			case "*uint32":
-				valueTmp := new(uint32)
-				*valueTmp = *(data[index].(*uint32))
-				*(value.(**uint32)) = valueTmp
+				valueSrc := (data[index]).(*sql.NullInt64)
+
+				if valueSrc.Valid {
+					valueTmp := new(uint32)
+					*valueTmp = (uint32)(valueSrc.Int64)
+					*(value.(**uint32)) = valueTmp
+				} else {
+					value = nil
+				}
+
 			case "*uint64":
-				valueTmp := new(uint64)
-				*valueTmp = *(data[index].(*uint64))
-				*(value.(**uint64)) = valueTmp
+				valueSrc := (data[index]).(*sql.NullInt64)
+
+				if valueSrc.Valid {
+					valueTmp := new(uint64)
+					*valueTmp = (uint64)(valueSrc.Int64)
+					*(value.(**uint64)) = valueTmp
+				} else {
+					value = nil
+				}
+
 			}
 		}
 	}
@@ -153,21 +211,30 @@ func GetQueryInfo(tableName string, pb proto.Message, queryField []string) (stri
 
 		switch filedType {
 		case "*float32":
-			revResult = append(revResult, new(float32))
+			//revResult = append(revResult, new(float32))
+			revResult = append(revResult, new(sql.NullFloat64))
 		case "*float64":
-			revResult = append(revResult, new(float64))
+			//revResult = append(revResult, new(float64))
+			revResult = append(revResult, new(sql.NullFloat64))
 		case "*int32":
-			revResult = append(revResult, new(int32))
+			//revResult = append(revResult, new(int32))
+			revResult = append(revResult, new(sql.NullInt64))
 		case "*int64":
-			revResult = append(revResult, new(int64))
+			//revResult = append(revResult, new(int64))
+			revResult = append(revResult, new(sql.NullInt64))
 		case "*string":
-			revResult = append(revResult, new(string))
+			//revResult = append(revResult, new(string))
+			revResult = append(revResult, new(sql.NullString))
 		case "*uint8":
-			revResult = append(revResult, new(uint8))
+			//revResult = append(revResult, new(uint8))
+			revResult = append(revResult, new(sql.NullInt64))
 		case "*uint32":
-			revResult = append(revResult, new(uint32))
+			//revResult = append(revResult, new(uint32))
+			revResult = append(revResult, new(sql.NullInt64))
 		case "*uint64":
-			revResult = append(revResult, new(uint64))
+			//revResult = append(revResult, new(uint64))
+			revResult = append(revResult, new(sql.NullInt64))
+
 		}
 
 		iNum++
