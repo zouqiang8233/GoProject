@@ -13,7 +13,7 @@ import (
 CREATE TABLE student (
   name varchar(50) DEFAULT NULL,
   age int(11) DEFAULT NULL,
-  no int(11) NOT NULL DEFAULT '0',
+  no int(20) NOT NULL DEFAULT '0',
   PRIMARY KEY (no),
   KEY index_student_name (name) USING BTREE
 );
